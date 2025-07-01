@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chai One Cafe - Your Perfect Brew</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1A1A1A; /* Dark black background */
+            color: #E0E0E0; /* Light gray text for contrast */
+        }
+        .text-green-custom {
+            color: #3CB371; /* Medium Sea Green for accents */
+        }
+        .bg-green-custom {
+            background-color: #3CB371;
+        }
+        .hover\:bg-green-dark:hover {
+            background-color: #2E8B57; /* Darker Sea Green on hover */
+        }
+        .text-yellow-custom {
+            color: #FFD700; /* Gold Yellow for highlights */
+        }
+        .bg-black-custom {
+            background-color: #2C2C2C; /* Slightly lighter black for sections */
+        }
+        .section-padding {
+            padding: 4rem 1rem; /* Consistent padding for sections */
+        }
+        @media (min-width: 768px) {
+            .section-padding {
+                padding: 6rem 2rem;
+            }
+        }
+        /* Custom styles for Hero Section background with gradient overlay */
+        .hero-bg {
+            background-color: #3CB371; /* Fallback for background */
+            position: relative;
+            overflow: hidden;
+            display: flex; /* Use flexbox for layout */
+            flex-direction: column; /* Stack on small screens */
+            align-items: center; /* Center items vertically */
+            justify-content: center; /* Center items horizontally */
+            padding: 4rem 1rem;
+            min-height: 600px; /* Ensure sufficient height */
+        }
+
+        @media (min-width: 768px) {
+            .hero-bg {
+                flex-direction: row; /* Side-by-side on larger screens */
+                justify-content: space-around; /* Distribute space */
+                padding: 6rem 2rem;
+                min-height: 700px;
+            }
+        }
+
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to right, rgba(26,26,26,0.9) 0%, rgba(26,26,26,0.7) 40%, rgba(26,26,26,0.0) 100%);
+            z-index: 1;
+            /* Hide gradient on mobile, show on desktop */
+            display: none;
+        }
+        @media (min-width: 768px) {
+            .hero-bg::before {
+                display: block;
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 500px;
+            margin-bottom: 2rem; /* Space between text and image on mobile */
+        }
+        @media (min-width: 768px) {
+            .hero-content {
+                text-align: left;
+                margin-right: 4rem; /* Space between text and image on desktop */
+                margin-bottom: 0;
+            }
+        }
+
+        .hero-image {
+            position: relative;
+            z-index: 2;
+            width: 80%; /* Adjust size for mobile */
+            max-width: 400px; /* Max width for image */
+            height: auto;
+            border-radius: 9999px; /* Make it circular like a cup's base */
+            object-fit: cover;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5); /* Stronger shadow for depth */
+        }
+        @media (min-width: 768px) {
+            .hero-image {
+                width: 45%; /* Adjust size for desktop */
+                max-width: 500px;
+            }
+        }
+
+        /* Animation for hero content on load */
+        @keyframes fadeInSlide {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .animate-fade-in-slide {
+            animation: fadeInSlide 1s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-fade-in {
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+
+        /* Custom positioning for logo over text */
+        .brand-logo-container {
+            position: relative;
+            display: flex; /* Use flex to align items but allow absolute positioning */
+            align-items: center; /* Vertically center items in the flex container */
+            gap: 1rem; /* Space between logo and text, if not overlapping entirely */
+            padding-left: 0.5rem; /* Add some padding from the left edge */
+        }
+        .brand-logo {
+            position: absolute;
+            left: 0; /* Align to the left of the container */
+            top: 50%; /* Center vertically */
+            transform: translateY(-50%); /* Adjust for vertical centering */
+            z-index: 30; /* Ensure it's above the text */
+            /* Adjusted size for better overlap */
+            height: 48px; /* Slightly larger for better overlap */
+            width: auto;
+            /* Add negative left margin to pull it slightly over the text */
+            margin-left: -20px; /* Adjust this value as needed for desired overlap */
+        }
+        .brand-name-link {
+            position: relative; /* Ensure z-index works on text */
+            z-index: 20; /* Ensure text is behind the logo if overlapping */
+            padding-left: 30px; /* Push text to the right to make space for logo */
+        }
+
+        /* Adjustments for mobile view of the brand section */
+        @media (max-width: 767px) {
+            .brand-logo {
+                height: 40px; /* Smaller logo on mobile */
+                margin-left: -15px; /* Adjust overlap for mobile */
+            }
+            .brand-name-link {
+                padding-left: 25px; /* Adjust text padding for mobile */
+            }
+            /* Adjust the mobile menu display if it's interfering */
+            nav > div:last-child {
+                position: relative; /* Ensure mobile menu button is positioned correctly */
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="bg-black-custom shadow-lg py-4">
+        <nav class="container mx-auto flex justify-between items-center px-4 relative">
+            <!-- Left aligned: Cafe Name with Logo over it -->
+            <div class="brand-logo-container">
+                <!-- Logo Image -->
+                <img src="/image.jfif" alt="Chai One Cafe Logo" class="brand-logo rounded-full shadow-lg">
+                <!-- Cafe Name -->
+                <a href="#" class="text-2xl font-bold text-yellow-custom rounded-md p-2 brand-name-link">Chai One Cafe</a>
+            </div>
+
+            <!-- Right aligned: Navigation links and Mobile Menu Button -->
+            <div class="flex items-center space-x-6">
+                <!-- Navigation Links (hidden on mobile, shown on desktop) -->
+                <div class="hidden md:flex space-x-6">
+                    <a href="#about" class="text-white hover:text-green-custom font-medium rounded-md p-2 transition duration-300">About</a>
+                    <a href="#menu" class="text-white hover:text-green-custom font-medium rounded-md p-2 transition duration-300">Menu</a>
+                    <a href="#contact" class="text-white hover:text-green-custom font-medium rounded-md p-2 transition duration-300">Contact</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-yellow-custom focus:outline-none rounded-md p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-bg text-white rounded-md mx-4 md:mx-auto md:max-w-7xl my-8">
+        <!-- Hero Content (Text) -->
+        <div class="hero-content animate-fade-in-slide">
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-2 drop-shadow-lg text-white leading-tight">
+                Brewed To Perfection
+            </h1>
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg text-yellow-custom leading-tight">
+                Just For You
+            </h2>
+            <p class="text-lg md:text-xl mb-8 max-w-xl mx-auto md:mx-0 text-gray-300">
+                Welcome to our cafe where every sip is an experience.
+            </p>
+            <a href="#menu" class="bg-yellow-custom text-black font-bold py-3 px-8 rounded-full shadow-xl hover:bg-yellow-400 transition duration-300 transform hover:scale-105 inline-block">
+                Order Now
+            </a>
+        </div>
+
+        <!-- Hero Image -->
+        <img src="/hehe.jfif" alt="Delicious Chai Cup" class="hero-image animate-fade-in">
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="container mx-auto section-padding bg-black-custom shadow-lg rounded-xl mb-8 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold text-green-custom mb-6">Our Story</h2>
+            <p class="text-lg text-gray-300 leading-relaxed mb-4">
+                At Chai One Cafe, we believe in the simple joy of a perfectly brewed cup of chai. Our journey began with a passion for traditional chai recipes,
+                blended with a desire to create a welcoming space where friends, family, and colleagues can connect.
+            </p>
+            <p class="text-lg text-gray-300 leading-relaxed">
+                Every cup is crafted with the finest ingredients, from aromatic spices to premium tea leaves, ensuring an unforgettable experience.
+                Join us for a moment of warmth, comfort, and deliciousness.
+            </p>
+        </div>
+    </section>
+    <!-- Menu Section -->
+    <section id="menu" class="container mx-auto section-padding bg-black-custom shadow-lg rounded-xl mb-8 px-4">
+        <h2 class="text-4xl font-bold text-green-custom text-center mb-12">Our Delicious Offerings</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+            <!-- Menu Item 1: Classic Masala Chai -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                <img src="/chai ma.jfif" alt="Classic Masala Chai" class="w-full h-48 object-cover rounded-md mb-4">
+                <h3 class="text-2xl font-semibold text-yellow-custom mb-2">Classic Masala Chai</h3>
+                <p class="text-gray-300 mb-3">Our signature blend of black tea, ginger, cardamom, cinnamon, and cloves, brewed to perfection with milk and sugar.</p>
+                <span class="text-xl font-bold text-green-custom">80/-</span>
+            </div>
+
+            <!-- Menu Item 2: Ginger Chai -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                <img src="/lassa.jfif" alt="Ginger Chai" class="w-full h-48 object-cover rounded-md mb-4">
+                <h3 class="text-2xl font-semibold text-yellow-custom mb-2">Zesty Ginger Chai</h3>
+                <p class="text-gray-300 mb-3">A refreshing and invigorating chai with a generous kick of fresh ginger, perfect for any time of day.</p>
+                <span class="text-xl font-bold text-green-custom">80/-</span>
+            </div>
+<!-- Menu Item 3: Cardamom Green Tea -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                <img src="/tea green.jfif" alt="Cardamom Green Tea" class="w-full h-48 object-cover rounded-md mb-4">
+                <h3 class="text-2xl font-semibold text-yellow-custom mb-2"> Green Tea</h3>
+                <p class="text-gray-300 mb-3">A light and refreshing green tea infused with the delicate aroma of green cardamom pods.</p>
+                <span class="text-xl font-bold text-green-custom">70/-</span>
+            </div>
+            <!-- Menu Item 4: Paratha -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                <img src="/aloo.jfif" alt="Flaky Paratha" class="w-full h-48 object-cover rounded-md mb-4">
+                <h3 class="text-2xl font-semibold text-yellow-custom mb-2">Flaky Aloo Paratha</h3>
+                <p class="text-gray-300 mb-3">Traditional Indian flatbread stuffed with a spiced potato mixture, served with yogurt and pickle.</p>
+                <span class="text-xl font-bold text-green-custom">150/-</span>
+            </div>
+            <!-- menu item 5: chicken Paratha -->
+             <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                <img src="/para.jfif" alt="Flaky Paratha" class="w-full h-48 object-cover rounded-md mb-4">
+                <h3 class="text-2xl font-semibold text-yellow-custom mb-2">Chicken Paratha</h3>
+                <p class="text-gray-300 mb-3">Loaded with spicy chicken and wrapped in a crispy, buttery paratha our Chicken Paratha is a flavor-packed desi treat. Only at Chaione!</p>
+                <span class="text-xl font-bold text-green-custom">280/-</span>
+            </div>
+            <!-- menu item 6: layered Paratha -->
+             <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                <img src="/layer.jfif" alt="Flaky Paratha" class="w-full h-48 object-cover rounded-md mb-4">
+                <h3 class="text-2xl font-semibold text-yellow-custom mb-2">layered Paratha</h3>
+                <p class="text-gray-300 mb-3">Flaky, buttery, and perfectly golden our Layered Paratha melts in your mouth with every bite. A true desi delight at Chaione!</p>
+                <span class="text-xl font-bold text-green-custom">180/-</span>
+            </div>
+             <!-- menu item: biryani -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                <img src="/biryani.jfif" alt="chicken biryani" class="w-full h-48 object-cover rounded-md mb-4">
+                <h3 class="text-2xl font-semibold text-yellow-custom mb-2">Chicken biryani</h3>
+                <p class="text-gray-300 mb-3">Aromatic rice, tender chicken, and rich spices — our Chicken Biryani is a burst of desi flavor in every bite. Served hot at Chaione!</p>
+                <span class="text-xl font-bold text-green-custom">900/-</span>
+            </div>  
+            <!-- Menu item 8 : Chicken karahi -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                <img src="/karahi.jfif" alt="Chicken Karahi" class="w-full h-48 object-cover rounded-md mb-4">
+                <h3 class="text-2xl font-semibold text-yellow-custom mb-2">Chicken Karahi</h3>
+                <p class="text-gray-300 mb-3">Spice up your cravings with our sizzling Chicken Karahi tender chicken cooked in rich, aromatic masala, bursting with desi flavor. Served hot, fresh, and unforgettable only at Chaione!</p>
+                <span class="text-xl font-bold text-green-custom">1000/-</span>
+            </div>
+            <!-- Menu item 9:: chicken white karahi  -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                <img src="/white.jfif" alt="Chicken White" class="w-full h-48 object-cover rounded-md mb-4">
+                <h3 class="text-2xl font-semibold text-yellow-custom mb-2">Chicken White Karahi</h3>
+                <p class="text-gray-300 mb-3">Creamy, rich, and full of flavor our Chicken White Karahi is a mild and mouthwatering treat. Taste the difference at Chaione!</p>
+                <span class="text-xl font-bold text-green-custom">1400/-</span>
+            </div>
+            <!-- menu item: fries -->
+             <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                <img src="/fries.jfif" alt="French fries" class="w-full h-48 object-cover rounded-md mb-4">
+                <h3 class="text-2xl font-semibold text-yellow-custom mb-2">French fries</h3>
+                <p class="text-gray-300 mb-3">Crispy, golden, and perfectly salted our French Fries are the ultimate snack to satisfy your cravings. Only at Chaione!</p>
+                <span class="text-xl font-bold text-green-custom">90/-</span>
+            </div>
+            <!-- menu item:burger -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                <img src="/burger.jfif" alt="French fries" class="w-full h-48 object-cover rounded-md mb-4">
+                <h3 class="text-2xl font-semibold text-yellow-custom mb-2">Chicken Crispy Burger</h3>
+                <p class="text-gray-300 mb-3">Big crunch, bold flavor our Chicken Crispy Burger is packed with juicy chicken, fresh toppings, and creamy sauce. A crispy bite you’ll love at Chaione!</p>
+                <span class="text-xl font-bold text-green-custom">1400/-</span>
+            </div>
+            <!-- menu item 7 : chicken shawarma-->
+          <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                <img src="/shawarma.jfif" alt="Chicken shawarma" class="w-full h-48 object-cover rounded-md mb-4">
+                <h3 class="text-2xl font-semibold text-yellow-custom mb-2">Chicken shawarma</h3>
+                <p class="text-gray-300 mb-3">Juicy chicken, bold spices, and creamy sauce wrapped fresh for a perfect Chicken Shawarma bite. Only at Chaione!</p>
+                <span class="text-xl font-bold text-green-custom">120/-</span>
+            </div>  
+    </section>
+    <!-- Contact Section -->
+    <section id="contact" class="container mx-auto section-padding bg-black-custom shadow-lg rounded-xl px-4 mb-8">
+        <h2 class="text-4xl font-bold text-green-custom text-center mb-12">Visit Us or Get in Touch</h2>
+        <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Location & Hours -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-yellow-custom mb-4">Our Location & Hours</h3>
+                <p class="text-gray-300 mb-2"><strong>Address:</strong> Bypass Road near NADRA Office. Link Abasia town Road. Rahim Yar Khan, Rahimyar Khan, Pakistan</p>
+                <p class="text-gray-300 mb-2"><strong>Phone:</strong> 03006729059</p>
+                <p class="text-gray-300 mb-2"><strong>Email:</strong> info@chaionecafe.com</p>
+                <p class="text-gray-300 font-bold mt-4">Opening Hours:</p>
+                <ul class="list-disc list-inside text-gray-400">
+                    <li>Monday - Friday: 8:00 AM - 7:00 PM</li>
+                    <li>Saturday: 9:00 AM - 6:00 PM</li>
+                    <li>Sunday: 10:00 AM - 5:00 PM</li>
+                </ul>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-yellow-custom mb-4">Send Us a Message</h3>
+                <form>
+                    <div class="mb-4">
+                        <label for="name" class="block text-gray-300 text-sm font-bold mb-2">Name:</label>
+                        <input type="text" id="name" name="name" class="shadow appearance-none border border-gray-700 rounded-lg w-full py-2 px-3 bg-gray-900 text-white leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-green-custom" placeholder="Your Name" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block text-gray-300 text-sm font-bold mb-2">Email:</label>
+                        <input type="email" id="email" name="email" class="shadow appearance-none border border-gray-700 rounded-lg w-full py-2 px-3 bg-gray-900 text-white leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-green-custom" placeholder="your@example.com" required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="message" class="block text-gray-300 text-sm font-bold mb-2">Message:</label>
+                        <textarea id="message" name="message" rows="5" class="shadow appearance-none border border-gray-700 rounded-lg w-full py-2 px-3 bg-gray-900 text-white leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-green-custom" placeholder="Your message..." required></textarea>
+                    </div>
+                    <button type="submit" class="bg-green-custom hover:bg-green-dark text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 transform hover:scale-105 w-full">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black-custom text-white py-8">
+        <div class="container mx-auto text-center px-4">
+            <p>&copy; 2025 Chai One Cafe. All rights reserved.</p>
+            <div class="flex justify-center space-x-6 mt-4">
+                <a href="#" class="text-white hover:text-green-custom transition duration-300">Facebook</a>
+                <a href="#" class="text-white hover:text-green-custom transition duration-300">Instagram</a>
+                <a href="#" class="text-white hover:text-green-custom transition duration-300">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Basic JavaScript for mobile menu (optional, but good for UX)
+        document.querySelector('button.md\\:hidden').addEventListener('click', function() {
+            const navLinks = document.querySelector('nav > div.hidden.md\\:flex');
+            if (navLinks) {
+                navLinks.classList.toggle('hidden');
+                navLinks.classList.toggle('flex');
+                navLinks.classList.toggle('flex-col');
+                navLinks.classList.toggle('absolute');
+                navLinks.classList.toggle('top-16');
+                navLinks.classList.toggle('left-0');
+                navLinks.classList.toggle('w-full');
+                navLinks.classList.toggle('bg-black-custom'); /* Updated for dark theme */
+                navLinks.classList.toggle('p-4');
+                navLinks.classList.toggle('shadow-md');
+                navLinks.classList.toggle('z-10'); /* Ensure it's above other content */
+
+                // Add styling for mobile menu links
+                navLinks.querySelectorAll('a').forEach(link => {
+                    link.classList.add('py-2', 'px-4', 'w-full', 'text-left', 'border-b', 'border-gray-700', 'text-white'); /* Updated for dark theme */
+                    link.classList.remove('p-2'); // Remove desktop padding
+                });
+            }
+        });
+    </script>
+</body>
+</html>
